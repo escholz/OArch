@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OArch</string>
+    <string name="csv_column_title">title</string>
+    <string name="csv_column_duration">durationInMs</string>
 </resources>

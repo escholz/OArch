@@ -42,4 +42,5 @@ dependencies {
     })
 
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:design:24.1.1'
 }

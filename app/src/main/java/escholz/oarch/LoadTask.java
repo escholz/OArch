@@ -1,34 +1,33 @@
 package escholz.oarch;
 
+import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class LoadTask extends AsyncTask<String, Void, List<Data>> {
+public class LoadTask extends AsyncTask<Void, Void, LiveData<List<Data>>> {
     private final OnLoadCompleteListener listener;
+    private AppDatabase appDatabase;
 
-    public LoadTask(OnLoadCompleteListener listener) {
+    public LoadTask(@NonNull AppDatabase appDatabase, @Nullable OnLoadCompleteListener listener) {
         this.listener = listener;
+        this.appDatabase = appDatabase;
     }
 
     @Override
-    protected List<Data> doInBackground(String... strings) {
-        List<Data> list = new ArrayList<>(10);
-        for (int index = 0; index < 10; index++)
-            list.add(new Data(String.format(Locale.US, "Item #%d", index),
-                    100*index));
-        return list;
+    protected LiveData<List<Data>> doInBackground(Void... voids) {
+        return appDatabase.dataDao().getAll();
     }
 
     @Override
-    protected void onPostExecute(List<Data> data) {
+    protected void onPostExecute(LiveData<List<Data>> data) {
         if (listener != null)
             listener.onLoadComplete(this, data);
     }
 
     public interface OnLoadCompleteListener {
-        void onLoadComplete(LoadTask loadTask, List<Data> data);
+        void onLoadComplete(LoadTask loadTask, LiveData<List<Data>> data);
     }
 }
